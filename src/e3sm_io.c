@@ -488,6 +488,19 @@ err_out:
         }
     }
 
+    timing[0] = MPI_Wtime() - timing[0];
+    MPI_Reduce(timing, max_t, 3, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (cfg.rank == 0) {
+        printf("read_decomp=%.2f e3sm_io_core=%.2f MPI init-to-finalize=%.2f\n",
+               max_t[1],max_t[2],max_t[0]);
+        printf("-----------------------------------------------------------\n");
+        printf("\n\n");
+
+        printf ("#%%$: e3sm_read_decom_time: %.2f\n", max_t[1]);
+        printf ("#%%$: e3sm_core_time: %.2f\n", max_t[2]);
+        printf ("#%%$: e3sm_total_time: %.2f\n", max_t[0]);
+    }
+
     MPI_Finalize ();
 
     return (err < 0) ? 1 : 0;

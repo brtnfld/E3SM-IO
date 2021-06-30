@@ -438,7 +438,7 @@ int e3sm_io_case::var_wr_case(e3sm_io_config &cfg,
     check_malloc(&cfg, &driver);
 
     /* note inquiring file size may be expensive on some machines */
-    if (cfg.verbose && global_rank == 0)
+    if ((cfg.verbose || cfg.profiling) && global_rank == 0)
         driver.inq_file_size(cmeta->outfile, &cmeta->file_size);
 
 err_out:
