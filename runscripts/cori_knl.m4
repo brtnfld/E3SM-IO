@@ -47,7 +47,7 @@ INDIR="IN_${CONFIG_POST}"
 INDIR=${!INDIR}
 APIS=(adios pnetcdf hdf5 hdf5_log)
 STRATES=(canonical blob log)
-OPTIONS=(1100 1110 1111)
+OPTIONS=(11111)
 FFREQS=(VAR_RECS)
 OPS=(VAR_OP)
 
@@ -92,6 +92,7 @@ export H5VL_LOG_METADATA_SHARE=1
 export H5VL_LOG_METADATA_MERGE=0
 export H5VL_LOG_METADATA_ZIP=1
 export H5VL_LOG_SEL_ENCODING=1
+export H5VL_LOG_SUBFILING=1
 export E3SM_IO_HDF5_USE_LOGVOL_WRITEN=1
 export H5VL_LOG_SHOW_PROFILING_INFO=1
 export H5VL_LOG_PRINT_MPI_INFO=1
@@ -161,10 +162,12 @@ do
                                 META_ENCODE=${OPT:1:1}
                                 META_ZIP=${OPT:2:1}
                                 META_SHARE=${OPT:3:1}
+                                SUBFILING=${OPT:4:1}
 
                                 export H5VL_LOG_METADATA_SHARE=${META_SHARE}
                                 export H5VL_LOG_METADATA_ZIP=${META_ZIP}
                                 export H5VL_LOG_SEL_ENCODING=${META_ENCODE}
+                                export H5VL_LOG_SUBFILING=${SUBFILING}
                                 export E3SM_IO_HDF5_USE_LOGVOL_WRITEN=${DWRITE_N}
 
                                 echo "========================== E3SM-IO ${API} ${OP} =========================="
@@ -200,6 +203,7 @@ do
                                 echo "#%$: logvol_meta_encode: ${META_ENCODE}"
                                 echo "#%$: logvol_meta_zip: ${META_ZIP}"
                                 echo "#%$: logvol_meta_share: ${META_SHARE}"
+                                echo "#%$: logvol_subfiling: ${SUBFILING}"
                                 echo "#%$: operation: ${OP}"
                                 echo "#%$: delay_init: 1"
                                 echo "#%$: number_of_nodes: ${NN}"
