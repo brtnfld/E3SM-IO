@@ -20,6 +20,7 @@ if [[ "$HOSTNAME_PREFIX" == "cori" ]]; then
     ADIOS2_SRC_PATH=/global/homes/k/khl7265/adios2/2.7.1
     ADIOS2_LIB_PATH=/global/homes/k/khl7265/.local/adios2/2.7.1
     OUTPATH_ROOT=/global/cscratch1/sd/khl7265/FS_128_16M/E3SM
+    SUBFILEPATH_ROOT=/global/cscratch1/sd/khl7265/FS_1_16M/E3SM
     INFILE=/global/cscratch1/sd/wkliao/FS_1M_32/ND_1951_256K.1.h5
     ACC=m2956
     QUEUE=regular
@@ -36,6 +37,7 @@ elif [[ "$HOSTNAME_PREFIX" == "logi" ]]; then
     ADIOS2_SRC_PATH=/gpfs/alpine/csc332/scratch/khl7265/adios2/2.7.1
     ADIOS2_LIB_PATH=/gpfs/alpine/csc332/scratch/khl7265/.local/adios2/2.7.1
     OUTPATH_ROOT=/gpfs/alpine/csc332/scratch/khl7265/FS_EVAL/e3sm/output
+    SUBFILEPATH_ROOT=/gpfs/alpine/csc332/scratch/khl7265/FS_EVAL/e3sm/output
     INFILE=/gpfs/alpine/csc332/scratch/khl7265/FS_EVAL/e3sm/intput
     ACC=csc332
     SCRIPT=summit
@@ -233,7 +235,7 @@ FNAME="${CONFIG}_logvl${LOGVOL_HASH_PREFIX}_e3sm${E3SM_IO_HASH_PREFIX}_hdf${HDF5
 SUBMIT_DATE=$(date)
 
 GEN_SCRIPT="m4 -D VAR_NAME=\"${FNAME}\" -D VAR_NN=\"${NN}\" -D VAR_PPN=\"${PPN}\" -D VAR_TL=\"${TL}\" -D VAR_ACC=\"${ACC}\" -D VAR_NODE_TYPE=\"${NODE_TYPE}\" \
--D VAR_OUTDIR_ROOT=\"${OUTPATH_ROOT}\" -D VAR_INFILE=\"${INFILE}\" -D VAR_CONFIG=\"${CONFIG}\" -D VAR_OP=\"${OP}\" -D VAR_HX=\"${HX}\" -D VAR_RECS=\"${RECS}\" \
+-D VAR_OUTDIR_ROOT=\"${OUTPATH_ROOT}\" -D VAR_SUBFILEDIR_ROOT=\"${SUBFILEPATH_ROOT}\" -D VAR_INFILE=\"${INFILE}\" -D VAR_CONFIG=\"${CONFIG}\" -D VAR_OP=\"${OP}\" -D VAR_HX=\"${HX}\" -D VAR_RECS=\"${RECS}\" \
 -D VAR_RUNS=\"${RUNS}\" -D VAR_RTL=\"${RTL}\" -D VAR_SUBMIT_DATE=\"${SUBMIT_DATE}\"  -D VAR_QUEUE=\"${QUEUE}\" \
 -D VAR_E3SM_IO_HASH=\"${E3SM_IO_HASH}\" -D VAR_E3SM_IO_DATE=\"${E3SM_IO_DATE}\" \
 -D VAR_HDF5_LIB_PATH=\"${HDF5_LIB_PATH}\" -D VAR_HDF5_LIB_DATE=\"${HDF5_DATE}\" -D VAR_HDF5_HASH=\"${HDF5_HASH}\" \

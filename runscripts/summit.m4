@@ -37,6 +37,7 @@ PPN=VAR_PPN
 RTL=VAR_RTL
 CONFIG_POST=VAR_CONFIG
 OUTDIR_ROOT=VAR_OUTDIR_ROOT
+SUBFILEDIR_ROOT=VAR_SUBFILEDIR_ROOT
 
 APPS=(../src/e3sm_io)
 HXS=(VAR_HX)
@@ -156,10 +157,6 @@ do
                                 export E3SM_IO_HINTS="cb_node=8;cb_config_list=*:8;romio_cb_write=enable"
                             fi
 
-                            OUTDIR="${OUTDIR_ROOT}/${API}/${STRATE}/${CONFIG_NAME}"
-                            echo "rm -rf ${OUTDIR}/*"
-                            rm -rf ${OUTDIR}/*
-
                             for OPT in ${OPTIONS[@]}
                             do
                                 DWRITE_N=${OPT:0:1}
@@ -173,6 +170,15 @@ do
                                 export H5VL_LOG_SEL_ENCODING=${META_ENCODE}
                                 export H5VL_LOG_SUBFILING=${SUBFILING}
                                 export E3SM_IO_HDF5_USE_LOGVOL_WRITEN=${DWRITE_N}
+
+                                if [[ "${STRATE}" == "blob" || "${H5VL_LOG_SUBFILING}" == "1" ]] ; then
+                                    OUTDIR="${SUBFILEDIR_ROOT}/${API}/${STRATE}/${CONFIG_NAME}"
+                                else
+                                    OUTDIR="${OUTDIR_ROOT}/${API}/${STRATE}/${CONFIG_NAME}"
+                                fi
+                                
+                                echo "rm -rf ${OUTDIR}/*"
+                                rm -rf ${OUTDIR}/*
 
                                 echo "========================== E3SM-IO ${API} ${OP} =========================="
                                 >&2 echo "========================== E3SM-IO ${API} ${OP}=========================="
