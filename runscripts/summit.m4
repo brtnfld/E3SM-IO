@@ -180,8 +180,8 @@ do
                                 echo "rm -rf ${OUTDIR}/*"
                                 rm -rf ${OUTDIR}/*
 
-                                echo "========================== E3SM-IO ${API} ${OP} =========================="
-                                >&2 echo "========================== E3SM-IO ${API} ${OP}=========================="
+                                echo "========================== E3SM-IO ${API} ${STRATE} ${OP} =========================="
+                                >&2 echo "========================== E3SM-IO ${API} ${STRATE} ${OP}=========================="
                                 
                                 CUR_E3SM_IO_DATE=$(stat -c %Y ../src/e3sm_io)
                                 if [[ "${CUR_E3SM_IO_DATE}" != "${E3SM_IO_DATE}" ]]; then

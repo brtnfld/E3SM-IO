@@ -74,7 +74,7 @@ elif [[ "$HOSTNAME_PREFIX" == "Ubun" ]]; then
     OUTPATH_ROOT=${HOME}/Desktop/nova_data/output
     INFILE=${HOME}/Desktop/nova_data/neardet_r00012096_s01_t00_R19-02-23-miniprod5.i_v1_data.h5caf.h5
     ACC=test_acc
-    SCRIPT=theta
+    SCRIPT=cori
     NODE_TYPE=local
 fi
 
