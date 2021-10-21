@@ -50,6 +50,13 @@ foreach(`t', E3SM_IO_TIMERS, `"CONCATE(`e3sm_io_timer_', t)",
 ')dnl
 };
 
+int e3sm_io_reset_profile() {
+	int i;
+	for (i = 0; i < E3SM_IO_NTIMER; i++) {
+		e3sm_io_profile_times[i] = 0;
+	}
+}
+
 int e3sm_io_print_profile(e3sm_io_config *cfg){
     int i;
 

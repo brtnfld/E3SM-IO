@@ -182,10 +182,12 @@ int main (int argc, char **argv) {
     double timing[3], max_t[3];
     e3sm_io_config cfg;
     e3sm_io_decom decom;
+    int hx;
+    double t0,t2;
 
     MPI_Init (&argc, &argv);
 
-    timing[0] = MPI_Wtime();
+    t0 = MPI_Wtime();
 
     MPI_Comm_rank (MPI_COMM_WORLD, &(cfg.rank));
     MPI_Comm_size (MPI_COMM_WORLD, &(cfg.np));
@@ -442,33 +444,90 @@ int main (int argc, char **argv) {
         cfg.run_case = unknown;
 
     timing[1] = MPI_Wtime() - timing[1];
+    
     MPI_Barrier(MPI_COMM_WORLD);
-    timing[2] = MPI_Wtime();
-
+    t2 = MPI_Wtime();
     /* set MPI-IO and PnetCDF hints */
     err = MPI_Info_create (&(cfg.info));
     CHECK_MPIERR
     err += set_info (&cfg, &decom);
     if (err < 0) goto err_out;
+    t2 = MPI_Wtime() - t2;
 
-    /* the core of this benchmark */
-    err = e3sm_io_core (&cfg, &decom);
-    CHECK_ERR
+    t0 = MPI_Wtime() - t0;
 
-    timing[2] = MPI_Wtime() - timing[2];
+    hx = cfg.hx;
+    if (hx==0||hx==-1){
+        double t;
 
-    /* report timing breakdowns */
-    report_timing_WR(&cfg, &decom);
+        cfg.hx = 0;
+        if (cfg.profiling) e3sm_io_reset_profile(&cfg);
 
-    if (cfg.profiling) e3sm_io_print_profile(&cfg);
+        MPI_Barrier(MPI_COMM_WORLD);
+        t = MPI_Wtime();
 
-    timing[0] = MPI_Wtime() - timing[0];
-    MPI_Reduce(timing, max_t, 3, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    if (cfg.rank == 0) {
-        printf("read_decomp=%.2f e3sm_io_core=%.2f MPI init-to-finalize=%.2f\n",
-               max_t[1],max_t[2],max_t[0]);
-        printf("-----------------------------------------------------------\n");
-        printf("\n\n");
+        /* the core of this benchmark */
+        err = e3sm_io_core (&cfg, &decom);
+        CHECK_ERR
+
+        t = MPI_Wtime() - t;
+    
+        timing[2]=t+t2;
+        timing[0]=t+t0;
+
+        /* report timing breakdowns */
+        report_timing_WR(&cfg, &decom);
+        
+        if (cfg.profiling) e3sm_io_print_profile(&cfg);
+
+        MPI_Reduce(timing, max_t, 3, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        if (cfg.rank == 0) {
+            printf("read_decomp=%.2f e3sm_io_core=%.2f MPI init-to-finalize=%.2f\n",
+                max_t[1],max_t[2],max_t[0]);
+            printf("-----------------------------------------------------------\n");
+            printf("\n\n");
+
+            printf ("#%%$: e3sm_read_decom_time: %.2f\n", max_t[1]);
+            printf ("#%%$: e3sm_core_time: %.2f\n", max_t[2]);
+            printf ("#%%$: e3sm_total_time: %.2f\n", max_t[0]);
+        }
+    }
+    if (hx==1||hx==-1){
+        double t;
+
+        cfg.hx = 1;
+        if (cfg.profiling) e3sm_io_reset_profile(&cfg);
+
+        MPI_Barrier(MPI_COMM_WORLD);
+        t = MPI_Wtime();
+
+        /* the core of this benchmark */
+        err = e3sm_io_core (&cfg, &decom);
+        CHECK_ERR
+
+        t = MPI_Wtime() - t;
+    
+        timing[2]=t+t2;
+        timing[0]=t+t0;
+
+        /* report timing breakdowns */
+        report_timing_WR(&cfg, &decom);
+        
+        if (cfg.profiling) e3sm_io_print_profile(&cfg);
+
+        MPI_Reduce(timing, max_t, 3, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+        if (cfg.rank == 0) {
+            printf("read_decomp=%.2f e3sm_io_core=%.2f MPI init-to-finalize=%.2f\n",
+                max_t[1],max_t[2],max_t[0]);
+            printf("-----------------------------------------------------------\n");
+            printf("\n\n");
+
+            printf ("#%%$: e3sm_read_decom_time: %.2f\n", max_t[1]);
+            printf ("#%%$: e3sm_core_time: %.2f\n", max_t[2]);
+            printf ("#%%$: e3sm_total_time: %.2f\n", max_t[0]);
+            printf ("-----+-----++------------+++++++++--+---\n");
+            fflush(stdout);
+        }
     }
 
 err_out:
@@ -486,19 +545,6 @@ err_out:
             free(decom.w_starts[i][0]);
             free(decom.w_starts[i]);
         }
-    }
-
-    timing[0] = MPI_Wtime() - timing[0];
-    MPI_Reduce(timing, max_t, 3, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    if (cfg.rank == 0) {
-        printf("read_decomp=%.2f e3sm_io_core=%.2f MPI init-to-finalize=%.2f\n",
-               max_t[1],max_t[2],max_t[0]);
-        printf("-----------------------------------------------------------\n");
-        printf("\n\n");
-
-        printf ("#%%$: e3sm_read_decom_time: %.2f\n", max_t[1]);
-        printf ("#%%$: e3sm_core_time: %.2f\n", max_t[2]);
-        printf ("#%%$: e3sm_total_time: %.2f\n", max_t[0]);
     }
 
     MPI_Finalize ();

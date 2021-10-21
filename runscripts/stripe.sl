@@ -60,16 +60,16 @@ do
         echo "rm -rf ${OUTDIR}/*"
         rm -rf ${OUTDIR}/*
 
-        echo "#%$: exp: e3sm_io"
-        echo "#%$: runs: ${i}"
-        echo "#%$: h_num: -1"
-        echo "#%$: nrec: ${NR}"
-        echo "#%$: api: hdf5_log"
-        echo "#%$: strategy: log"
-        echo "#%$: cb_nodes: default"
-        echo "#%$: flush_freq: ${NR}"
-        echo "#%$: number_of_nodes: ${NN}"
-        echo "#%$: number_of_proc: ${NP}"
+        echo "#%$=: exp: e3sm_io"
+        echo "#%$=: runs: ${i}"
+        echo "#%$=: h_num: -1"
+        echo "#%$=: nrec: ${NR}"
+        echo "#%$=: api: hdf5_log"
+        echo "#%$=: strategy: log"
+        echo "#%$=: cb_nodes: default"
+        echo "#%$=: flush_freq: ${NR}"
+        echo "#%$=: number_of_nodes: ${NN}"
+        echo "#%$=: number_of_proc: ${NP}"
 
         STARTTIME=`date +%s.%N`
 
@@ -99,16 +99,16 @@ do
     echo "rm -rf ${OUTDIR}/*"
     rm -rf ${OUTDIR}/*
     
-    echo "#%$: exp: e3sm_io"
-    echo "#%$: runs: ${i}"
-    echo "#%$: h_num: -1"
-    echo "#%$: nrec: ${NR}"
-    echo "#%$: api: hdf5_log"
-    echo "#%$: strategy: log"
-    echo "#%$: cb_nodes: 8"
-    echo "#%$: flush_freq: ${NR}"
-    echo "#%$: number_of_nodes: ${NN}"
-    echo "#%$: number_of_proc: ${NP}"
+    echo "#%$=: exp: e3sm_io"
+    echo "#%$=: runs: ${i}"
+    echo "#%$=: h_num: -1"
+    echo "#%$=: nrec: ${NR}"
+    echo "#%$=: api: hdf5_log"
+    echo "#%$=: strategy: log"
+    echo "#%$=: cb_nodes: 8"
+    echo "#%$=: flush_freq: ${NR}"
+    echo "#%$=: number_of_nodes: ${NN}"
+    echo "#%$=: number_of_proc: ${NP}"
 
     STARTTIME=`date +%s.%N`
 
