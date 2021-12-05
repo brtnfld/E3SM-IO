@@ -436,8 +436,11 @@ int main (int argc, char **argv) {
     /* determine run case */
     if (decom.num_decomp == 3)
         cfg.run_case = F;
-    else if (decom.num_decomp == 6)
+    else if (decom.num_decomp == 6){
         cfg.run_case = G;
+        // g case has only h0
+        if (hx == -1) hx = 0;
+    }
     else if (decom.num_decomp == 5)
         cfg.run_case = I;
     else
